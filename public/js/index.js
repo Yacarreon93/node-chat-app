@@ -1,4 +1,18 @@
 var socket = io()
+function scrollToBottom () {
+    var messages = $('#messages')
+    var newMessage = messages.children('li:last-child')    
+    var clientHeight = messages.prop('clientHeight')
+    var scrollTop = messages.prop('scrollTop')
+    var scrollHeight = messages.prop('scrollHeight')
+    var newMessageHeight = newMessage.innerHeight()
+    var lastMessageHeight = newMessage.prev().innerHeight()
+    // alert(clientHeight + '+' + scrollTop + '=' + scrollHeight)
+    if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+        // console.log('should scroll')
+        messages.scrollTop(scrollHeight)
+    }
+}
 socket.on('connect', () => {
     console.log('Connected to server')
 })
@@ -15,6 +29,7 @@ socket.on('newMessage', (message) => {
         createdAt: formattedDate
     })
     $('#messages').append(html)
+    scrollToBottom()
     // var formattedDate = moment(message.createdAt).format('h:mm a')
     // var li = $('<li></li>')
     // li.text(`${message.from} (${formattedDate}): ${message.text}`)
@@ -30,6 +45,7 @@ socket.on('newLocationMessage', (message) => {
         createdAt: formattedDate
     })
     $('#messages').append(html)
+    scrollToBottom()
     // var li = $('<li></li>')
     // var a = $('<a target="_blank">My current location</a>')
     // li.text(`${message.from}:`)
