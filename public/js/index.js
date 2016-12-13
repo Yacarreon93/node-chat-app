@@ -6,13 +6,14 @@ socket.on('disconnect', () => {
     console.log('Disconnected from server')
 })
 socket.on('newMessage', (message) => {
-    console.log('New message', message)
+    // console.log('New message', message)
+    var formattedDate = moment(message.createdAt).format('h:mm a')
     var li = $('<li></li>')
-    li.text(`${message.from}: ${message.text}`)
+    li.text(`${message.from} (${formattedDate}): ${message.text}`)
     $('#messages').append(li)
 })
 socket.on('newLocationMessage', (message) => {
-    console.log('New location message', message)
+    // console.log('New location message', message)
     var li = $('<li></li>')
     var a = $('<a target="_blank">My current location</a>')
     li.text(`${message.from}:`)
