@@ -28,6 +28,14 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
     console.log('Disconnected from server')
 })
+socket.on('updateUserList', (users) => {
+    console.log('Users list', users)
+    var ol = $('<ol></ol')    
+    users.forEach((user) => {
+        ol.append($('<li></li>').text(user))
+    })
+    $('#users').html(ol)
+}) 
 socket.on('newMessage', (message) => {
     // console.log('New message', message)
     var formattedDate = moment(message.createdAt).format('h:mm a')
