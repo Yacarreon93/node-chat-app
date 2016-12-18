@@ -31,13 +31,11 @@ io.on('connection', (socket) => {
         io.to(params.room).emit('updateUserList', users.getUserList(params.room))
 
         messageController.getAll(params.room).then((result) => { 
-
-            callback(undefined, result)
-
-            socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat room'))
-            socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`))
-
+            callback(undefined, result)            
         })
+
+        socket.emit('notify', 'Welcome to chat app')
+        socket.broadcast.to(params.room).emit('notify', `${params.name} has joined`)
 
     })
 
@@ -71,7 +69,7 @@ io.on('connection', (socket) => {
         var user = users.removeUser(socket.id)
         if (user) {
             io.to(user.room).emit('updateUserList', users.getUserList(user.room))
-            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`))
+            io.to(user.room).emit('notify', `${user.name} has left`)
         }
     })
 

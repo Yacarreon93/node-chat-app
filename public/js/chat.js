@@ -26,7 +26,7 @@ socket.on('connect', () => {
         } else {        
             console.log('Joined successfully')
             res.forEach((message) => newMessage(message))
-        }
+        }       
     })
 
 })
@@ -124,4 +124,23 @@ function deleteMessage(id) {
 socket.on('refreshMessages', (messages) => {
     $('ol#messages').empty()              
     messages.forEach((message) => newMessage(message))
+})
+
+socket.on('notify', (message) => {
+    var template = $('#notification-template').html()
+    var html = Mustache.render(template, {
+        message
+    })              
+    $('#notification').append(html)  
+    $('#notification').animate({
+            height: '40px'
+    }, 500, () => {            
+        setTimeout(() => {
+            $('#notification').animate({
+                height: '0px'
+            }, 500, () => {
+                $('#notification').html('')
+            })           
+        }, 3000)
+    })     
 })
