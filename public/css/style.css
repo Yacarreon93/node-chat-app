@@ -195,3 +195,20 @@ button:disabled {
   }
   
 }
+
+i {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+i.gray {
+  color: gray;
+}
+
+i.red {
+  color: red;
+}
+
+i.green {
+  color: green;
+}

@@ -35,6 +35,9 @@
                 <div class="message__title">
                     <h4>{{from}}</h4>
                     <span>{{createdAt}}</span>
+                    <i class="fa fa-check gray" aria-hidden="true"></i>
+                    <i class="fa fa-pencil-square-o" aria-hidden="true" onclick="editMessage('{{_id}}')"></i>
+                    <i class="fa fa-times red" aria-hidden="true" onclick="deleteMessage('{{_id}}')"></i>
                 </div>
                 <div class="message__body">
                     <p>{{text}}</p>
@@ -47,6 +50,8 @@
                 <div class="message__title">
                     <h4>{{from}}</h4>
                     <span>{{createdAt}}</span>
+                    <i class="fa fa-check gray" aria-hidden="true"></i>                    
+                    <i class="fa fa-times red" aria-hidden="true" onclick="deleteMessage('{{_id}}')"></i>
                 </div>
                 <div class="message__body">
                     <p>
@@ -56,11 +61,13 @@
             </li>
         </script>
         
+        <script src="https://use.fontawesome.com/0212ac1b9a.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="js/libs/jquery-3.1.1.min.js"></script>
         <script src="js/libs/moment.js"></script>
         <script src="js/libs/mustache.js"></script>
         <script src="js/libs/deparam.js"></script>
-        <script src="js/chat.js"></script>        
+        <script src="js/chat.js"></script>
+
     </body>
 </html>
