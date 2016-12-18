@@ -1,6 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose')
+const moment = require('moment')
 const Schema = mongoose.Schema
 
 const MessageSchema = Schema({
@@ -9,7 +10,7 @@ const MessageSchema = Schema({
 	text: String,
 	createdAt: { type: Number, default: moment().valueOf() },
     room: String,
-    viewed: Boolean
+    viewed: { type: Boolean, default: false }
 
 })
 
