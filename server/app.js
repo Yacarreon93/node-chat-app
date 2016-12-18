@@ -1,6 +1,7 @@
 'use strict'
 
 const socketIO = require('socket.io')
+const mongoose = require('mongoose')
 
 var server = require('./server')
 var config = require('./config')
@@ -64,8 +65,17 @@ io.on('connection', (socket) => {
     })
 })
 
-server.listen(config.PORT, () => {
+mongoose.connect(config.DB, (err, res) => {
 
-    console.log(`Server listen on port ${config.PORT}`)
+    if (err) {
+        return console.log('ERROR: Unable to connect to database >', err)        
+    }
+    
+    console.log('Connected to database successfully')
+    
+    server.listen(config.PORT, () => {
+        console.log(`Server runs on http://localhost:${config.PORT}`)
+
+    }) 
 
 })
