@@ -14,6 +14,8 @@
         </div> 
         
         <div class="chat__main">
+
+            <div id="notification" class="chat__notification"></div>
             
             <ol id="messages" class="chat__messages"></ol>
 
@@ -59,6 +61,10 @@
                     </p>
                 </div>
             </li>
+        </script>
+
+        <script id="notification-template" type="text/template">
+            <p>{{message}}</p>            
         </script>
         
         <script src="https://use.fontawesome.com/0212ac1b9a.js"></script>
