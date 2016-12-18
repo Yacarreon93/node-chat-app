@@ -10,13 +10,16 @@ var io = socketIO(server)
 var {Users} = require('./utils/users')
 var {isRealString} = require('./utils/validation.js')
 var {generateMessage, generateLocationMessage} = require('./utils/message')
+var messageController = require('./controllers/message')
 
 var users = new Users()
 
 io.on('connection', (socket) => {
+
     console.log('New user connected')
 
     socket.on('join', (params, callback) => {
+
         if (!isRealString(params.name) || !isRealString(params.room)) {
             callback('Username and room name are required')
         }
@@ -27,10 +30,30 @@ io.on('connection', (socket) => {
 
         io.to(params.room).emit('updateUserList', users.getUserList(params.room))
 
-        socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat room'))
-        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`))
-        callback()
-    })
+        messageController.getAll(params.room).then((result) => { 
+
+            callback(undefined, result)
+            messageController.create('Admin', 'Welcome to the chat room', params.room).then((result) => {
+                socket.emit('newMessage', result)
+            })            
+            messageController.create('Admin', `${params.name} has joined`, params.room).then((result) => {
+                socket.broadcast.to(params.room).emit('newMessage', result)
+            })
+
+        }, (error) => {
+
+            callback(error)
+            messageController.create('Admin', 'Welcome to the chat room', params.room).then((result) => {
+                socket.emit('newMessage', result)
+            })            
+            messageController.create('Admin', `${params.name} has joined`, params.room).then((result) => {
+                socket.broadcast.to(params.room).emit('newMessage', result)
+            })
+            
+        })
+
+        
+})
 
     socket.on('createMessage', (message, callback) => {
         // console.log('createMessage', message)       
@@ -70,7 +93,7 @@ mongoose.connect(config.DB, (err, res) => {
     if (err) {
         return console.log('ERROR: Unable to connect to database >', err)        
     }
-    
+
     console.log('Connected to database successfully')
     
     server.listen(config.PORT, () => {

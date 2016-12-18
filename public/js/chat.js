@@ -13,18 +13,24 @@ function scrollToBottom () {
         messages.scrollTop(scrollHeight)
     }
 }
+
 socket.on('connect', () => {
+
     // console.log('Connected to server')
     var params = $.deparam(window.location.search)
-    socket.emit('join', params, (error) => {
-        if (error) {
-            alert(error)
+
+    socket.emit('join', params, (err, res) => {
+        if (err) {
+            alert(err)
             window.location.href = '/'
-        } else {
-            console.log('Success')
+        } else {        
+            console.log('Joined successfully')
+            res.forEach((message) => newMessage(message))
         }
     })
+
 })
+
 socket.on('disconnect', () => {
     console.log('Disconnected from server')
 })
@@ -36,22 +42,7 @@ socket.on('updateUserList', (users) => {
     })
     $('#users').html(ol)
 }) 
-socket.on('newMessage', (message) => {
-    // console.log('New message', message)
-    var formattedDate = moment(message.createdAt).format('h:mm a')
-    var template = $('#message-template').html()
-    var html = Mustache.render(template, {
-        from: message.from,
-        text: message.text,
-        createdAt: formattedDate
-    })
-    $('#messages').append(html)
-    scrollToBottom()
-    // var formattedDate = moment(message.createdAt).format('h:mm a')
-    // var li = $('<li></li>')
-    // li.text(`${message.from} (${formattedDate}): ${message.text}`)
-    // $('#messages').append(li)
-})
+socket.on('newMessage', (message) => newMessage(message))
 socket.on('newLocationMessage', (message) => {
     // console.log('New location message', message)
     var formattedDate = moment(message.createdAt).format('h:mm a')
@@ -103,3 +94,16 @@ locationButton.on('click', () => {
         alert('Unable to fetch location')
     })
 })
+
+function newMessage(message) {
+    // console.log('New message', message)
+    var formattedDate = moment(message.createdAt).format('h:mm a')
+    var template = $('#message-template').html()
+    var html = Mustache.render(template, {
+        from: message.from,
+        text: message.text,
+        createdAt: formattedDate
+    })
+    $('#messages').append(html)
+    scrollToBottom()
+}

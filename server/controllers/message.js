@@ -24,11 +24,16 @@ function create(from, text, room) {
     message.text = text
     message.room = room
 
-    message.save((err, messageStored) => {
-        if (err) {
-            console.log(`Saving message ERROR: ${err}`)
-        } 
-    });
+    return new Promise((resolve, reject) => {
+
+        message.save((err, messageStored) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(messageStored)
+        })
+
+    })
 
 }
 
