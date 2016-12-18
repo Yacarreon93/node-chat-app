@@ -33,40 +33,28 @@ io.on('connection', (socket) => {
         messageController.getAll(params.room).then((result) => { 
 
             callback(undefined, result)
-            messageController.create('Admin', 'Welcome to the chat room', params.room).then((result) => {
-                socket.emit('newMessage', result)
-            })            
-            messageController.create('Admin', `${params.name} has joined`, params.room).then((result) => {
-                socket.broadcast.to(params.room).emit('newMessage', result)
-            })
 
-        }, (error) => {
+            socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat room'))
+            socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`))
 
-            callback(error)
-            messageController.create('Admin', 'Welcome to the chat room', params.room).then((result) => {
-                socket.emit('newMessage', result)
-            })            
-            messageController.create('Admin', `${params.name} has joined`, params.room).then((result) => {
-                socket.broadcast.to(params.room).emit('newMessage', result)
-            })
-            
         })
 
-        
-})
+    })
 
     socket.on('createMessage', (message, callback) => {
-        // console.log('createMessage', message)       
+            
         var user = users.getUser(socket.id)
+
         if (user && isRealString(message.text)) {
-            io.to(user.room).emit('newMessage', generateMessage(user.name, message.text))
+
+            messageController.create(user.name, message.text, user.room).then((res) => {
+                io.to(user.room).emit('newMessage', res)
+            })
+
         } 
+
         callback()
-        // socket.broadcast.emit('newMessage', {
-        //    from: message.from,
-        //    text: message.text,
-        //    createdAt: new Date().getTime()
-        // })
+
     })
 
     socket.on('createLocationMessage', (coords) => {    

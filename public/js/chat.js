@@ -34,6 +34,7 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
     console.log('Disconnected from server')
 })
+
 socket.on('updateUserList', (users) => {
     console.log('Users list', users)
     var ol = $('<ol></ol')    
@@ -42,7 +43,9 @@ socket.on('updateUserList', (users) => {
     })
     $('#users').html(ol)
 }) 
+
 socket.on('newMessage', (message) => newMessage(message))
+
 socket.on('newLocationMessage', (message) => {
     // console.log('New location message', message)
     var formattedDate = moment(message.createdAt).format('h:mm a')
@@ -67,15 +70,20 @@ socket.on('newLocationMessage', (message) => {
 // }, (data) => {
 //    console.log('Got it', data)
 // })
+
 $('#message-form').on('submit', (e) => {    
+
     e.preventDefault()
     var messageTextBox = $('[name=message]')
+    
     socket.emit('createMessage', {
         text: messageTextBox.val()
     }, () => {
         messageTextBox.val('')
     })
+
 })
+
 var locationButton = $('#send-location')
 locationButton.on('click', () => {
     if(!navigator.geolocation) {
