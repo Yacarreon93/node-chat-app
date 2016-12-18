@@ -75,7 +75,7 @@ $('#message-form').on('submit', (e) => {
 
     e.preventDefault()
     var messageTextBox = $('[name=message]')
-    
+
     socket.emit('createMessage', {
         text: messageTextBox.val()
     }, () => {
@@ -108,6 +108,7 @@ function newMessage(message) {
     var formattedDate = moment(message.createdAt).format('h:mm a')
     var template = $('#message-template').html()
     var html = Mustache.render(template, {
+        _id: message._id,
         from: message.from,
         text: message.text,
         createdAt: formattedDate
@@ -115,3 +116,12 @@ function newMessage(message) {
     $('#messages').append(html)
     scrollToBottom()
 }
+
+function deleteMessage(id) {
+    socket.emit('deleteMessage', id)
+}
+
+socket.on('refreshMessages', (messages) => {
+    $('ol#messages').empty()              
+    messages.forEach((message) => newMessage(message))
+})

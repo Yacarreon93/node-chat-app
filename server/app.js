@@ -74,6 +74,23 @@ io.on('connection', (socket) => {
             io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`))
         }
     })
+
+    socket.on('deleteMessage', (id) => {
+
+        messageController.remove(id).then((result) => {
+
+            let user = users.getUser(socket.id)
+
+            messageController.getAll(user.room).then((result) => { 
+
+                io.to(user.room).emit('refreshMessages', result)
+
+            })
+            
+        })
+
+    })
+
 })
 
 mongoose.connect(config.DB, (err, res) => {
