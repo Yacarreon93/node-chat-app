@@ -7,6 +7,6 @@ const config = {
     DB_NAME: 'chat-app',    
 }
 
-config.DB = `mongodb://${config.DB_HOST}:${config.DB_PORT}/${config.DB_NAME}`
+config.DB = 'mongodb://app:app123@ds141088.mlab.com:41088/chat-app'
 
 module.exports = config
