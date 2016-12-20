@@ -37,7 +37,7 @@
                 <div class="message__title">
                     <h4>{{from}}</h4>
                     <span>{{createdAt}}</span>
-                    <i class="fa fa-check gray" aria-hidden="true"></i>
+                    <i class="fa fa-check {{viewed}}" aria-hidden="true"></i>
                     <i class="fa fa-pencil-square-o" aria-hidden="true" onclick="editMessage('{{_id}}', this)"></i>
                     <i class="fa fa-times red" aria-hidden="true" onclick="deleteMessage('{{_id}}')"></i>
                 </div>
@@ -73,6 +73,7 @@
         <script src="js/libs/moment.js"></script>
         <script src="js/libs/mustache.js"></script>
         <script src="js/libs/deparam.js"></script>
+        <script src="js/libs/ifvisible.js"></script>
         <script src="js/chat.js"></script>
 
     </body>

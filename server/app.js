@@ -110,6 +110,27 @@ io.on('connection', (socket) => {
 
     })
 
+    socket.on('viewMessages', (callback) => {
+
+        var user = users.getUser(socket.id)
+
+        if (user) {
+
+            messageController.viewAll(user.name, user.room).then(() => {
+                
+                messageController.getAll(user.room).then((result) => { 
+
+                    io.to(user.room).emit('refreshMessages', result)
+                    callback()
+
+                })
+
+            })
+
+        }         
+
+    })
+
 })
 
 mongoose.connect(config.DB, (err, res) => {

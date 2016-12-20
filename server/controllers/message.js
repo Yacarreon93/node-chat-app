@@ -83,9 +83,28 @@ function remove(id) {
 
 }
 
+function viewAll(name, room) {
+    
+    return new Promise((resolve, reject) => {
+
+        Message.update({ room: room, from: { $ne: name } }, {viewed: true}, { multi: true } ,(err, messages) => {
+
+            if (err || !messages) {
+                reject(err)
+            }      
+
+            resolve(messages)
+
+        })
+
+    })
+
+}
+
 module.exports = { 
     create, 
     getAll,
     remove,
-    update
+    update,
+    viewAll
 }

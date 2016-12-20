@@ -110,11 +110,13 @@ function newMessage(message) {
     // console.log('New message', message)
     var formattedDate = moment(message.createdAt).format('h:mm a')
     var template = $('#message-template').html()
+    var viewed = message.viewed ? 'green' : 'gray'
     var html = Mustache.render(template, {
         _id: message._id,
         from: message.from,
         text: message.text,
-        createdAt: formattedDate
+        createdAt: formattedDate,
+        viewed: viewed
     })
     $('#messages').append(html)
     scrollToBottom()
@@ -196,3 +198,12 @@ function updateMessage () {
     return false
 
 }
+
+// If page is visible
+ifvisible.onEvery(3, function() {
+    
+    socket.emit('viewMessages', () => {
+        
+    })
+
+});
