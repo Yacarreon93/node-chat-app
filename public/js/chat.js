@@ -32,7 +32,10 @@ socket.on('connect', () => {
 })
 
 socket.on('disconnect', () => {
+
     console.log('Disconnected from server')
+    $('#messages').empty()
+
 })
 
 socket.on('updateUserList', (users) => {
@@ -144,3 +147,52 @@ socket.on('notify', (message) => {
         }, 3000)
     })     
 })
+
+function editMessage(id, element) {
+
+    $('li.message').css({ background: 'white' })
+
+    var messageBox = $(element).parent().parent()
+    messageBox.css({ background:'rgba(230, 234, 238, 1)' })
+
+    var messageBody = messageBox.children('.message__body')
+    var message = messageBody.children('p').text()
+    var div = $('<div class="chat__footer"></div>')
+    
+    messageBody.html('')
+
+    var editForm = $($('<form id="edit-form" onsubmit="return updateMessage()"></form>'));
+
+    editForm.append(
+        $('<input>', {
+            type: 'hidden',
+            name: 'messageId',
+            value: id
+        }),
+        $('<input>', {
+            type: 'text',
+            name: 'updated',
+            value: message
+        }),
+        $('<button>Update</button>')
+    )
+
+    div.append(editForm)
+    messageBody.append(div)
+}
+
+function updateMessage () {    
+    
+    var messageId = $('[name=messageId]')
+    var message = $('[name=updated]')
+
+    socket.emit('updateMessage', {
+        id: messageId.val(),
+        text: message.val()
+    }, () => {
+        console.log('Message updated')
+    })
+
+    return false
+
+}

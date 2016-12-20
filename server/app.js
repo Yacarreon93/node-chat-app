@@ -55,6 +55,27 @@ io.on('connection', (socket) => {
 
     })
 
+    socket.on('updateMessage', (message, callback) => {
+            
+        var user = users.getUser(socket.id)
+
+        if (user && isRealString(message.text)) {
+
+            messageController.update(message.id, message.text).then((res) => {
+                
+                messageController.getAll(user.room).then((res) => { 
+
+                    io.to(user.room).emit('refreshMessages', res)
+                    callback()
+
+                })
+
+            })
+
+        }        
+
+    })
+
     socket.on('createLocationMessage', (coords) => {    
         var user = users.getUser(socket.id)    
         io.to(user.room).emit('newLocationMessage', generateLocationMessage(

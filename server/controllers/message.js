@@ -37,6 +37,32 @@ function create(from, text, room) {
 
 }
 
+function update(id, text) {
+
+    return new Promise((resolve, reject) => {
+
+        Message.findById(id, (err, message) => {
+
+            if (err || !message) {
+                reject(err)
+            }
+
+            message.text = text
+            message.viewed = false
+
+            message.save((err, messageUpdated) => {
+                if (err) {
+                    reject(err)
+                }
+                resolve(messageUpdated)
+            })
+
+        })
+
+    })
+
+}
+
 function remove(id) {
 
     return new Promise((resolve, reject) => {
@@ -60,5 +86,6 @@ function remove(id) {
 module.exports = { 
     create, 
     getAll,
-    remove
+    remove,
+    update
 }

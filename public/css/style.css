@@ -33,6 +33,14 @@ button:hover {
   padding: 10px;
 }
 
+button.green {
+  background: limegreen;
+}
+
+button.green:hover {
+  background: green;
+}
+
 button:disabled {
   cursor: default;
   background: #698ea5;
@@ -224,4 +232,8 @@ i.red {
 
 i.green {
   color: green;
+}
+
+#edit-message {
+  display: none
 }
