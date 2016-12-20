@@ -89,7 +89,7 @@ function viewAll(name, room) {
 
         Message.update({ room: room, from: { $ne: name } }, {viewed: true}, { multi: true } ,(err, messages) => {
 
-            if (err || !messages) {
+            if (err || messages.nModified === 0) {
                 reject(err)
             }      
 
